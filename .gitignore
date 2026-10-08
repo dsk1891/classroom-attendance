@@ -1,0 +1,4 @@
+node_modules/
+data/attendance.json
+data/attendance.json.tmp
+.netlify/

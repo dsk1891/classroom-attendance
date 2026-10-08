@@ -1,0 +1,26 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#f7f8fc">
+    <title>Student attendance check-in</title>
+    <link rel="stylesheet" href="/styles.css">
+    <script src="/checkin.js" defer></script>
+  </head>
+  <body class="checkin-page">
+    <main class="checkin-card">
+      <a class="brand checkin-brand" href="/"><span class="brand-mark">A</span><span>Classroom <strong>Attendance</strong></span></a>
+      <div class="checkin-icon" aria-hidden="true">✓</div>
+      <p class="eyebrow">STUDENT CHECK-IN</p>
+      <h1 id="checkin-title">Mark your attendance</h1>
+      <p class="muted" id="checkin-subtitle">Enter your registered MIS number to check in.</p>
+      <form id="checkin-form" class="session-form">
+        <label>Your MIS number<input name="misNumber" placeholder="e.g. MIS-001" autocomplete="off" maxlength="32" required></label>
+        <button class="button button-primary button-wide" type="submit">Confirm my attendance</button>
+      </form>
+      <div id="checkin-message" class="checkin-message" role="status" aria-live="polite"></div>
+      <p class="checkin-footnote">Check in only for yourself. Your attendance will appear on your teacher's dashboard.</p>
+    </main>
+  </body>
+</html>

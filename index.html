@@ -1,0 +1,138 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#f7f8fc">
+    <title>Classroom Attendance</title>
+    <link rel="stylesheet" href="/styles.css">
+    <script src="/app.js" defer></script>
+  </head>
+  <body>
+    <div class="app-shell">
+      <header class="topbar">
+        <a class="brand" href="index.html" aria-label="Classroom Attendance home">
+          <span class="brand-mark">A</span>
+          <span>Classroom <strong>Attendance</strong></span>
+        </a>
+        <div class="topbar-meta"><span class="online-dot"></span> Local class workspace</div>
+      </header>
+
+      <main>
+        <section class="welcome">
+          <div>
+            <p class="eyebrow">TEACHER DASHBOARD</p>
+            <h1>Good day, Teacher <span aria-hidden="true">✦</span></h1>
+            <p class="muted">A clear view of your class, sessions, and attendance.</p>
+          </div>
+          <div class="date-chip"><span aria-hidden="true">▦</span><span id="today-date"></span></div>
+        </section>
+
+        <section class="stats-grid" aria-label="Attendance summary">
+          <article class="stat-card">
+            <span class="stat-icon violet" aria-hidden="true">♙</span>
+            <div><p>Enrolled students</p><strong id="total-students">0</strong><small>In your current roster</small></div>
+          </article>
+          <article class="stat-card">
+            <span class="stat-icon green" aria-hidden="true">✓</span>
+            <div><p>Present today</p><strong id="present-count">0</strong><small id="present-caption">No active session</small></div>
+          </article>
+          <article class="stat-card">
+            <span class="stat-icon gold" aria-hidden="true">◷</span>
+            <div><p>Not checked in</p><strong id="absent-count">0</strong><small id="absent-caption">Start a session to track</small></div>
+          </article>
+        </section>
+
+        <div class="dashboard-grid">
+          <section class="panel roster-panel">
+            <div class="panel-heading">
+              <div><p class="eyebrow">YOUR CLASS</p><h2>Student roster</h2></div>
+              <span class="count-pill" id="roster-count">0 students</span>
+            </div>
+            <form id="student-form" class="student-form">
+              <label>Student name<input name="name" placeholder="e.g. Asha Patel" maxlength="80" required></label>
+              <label>MIS number<input name="misNumber" placeholder="e.g. MIS-001" maxlength="32" required></label>
+              <label>Department name<input name="departmentName" placeholder="e.g. Computer Science" maxlength="50" required></label>
+              <button class="button button-primary" type="submit">＋ Add student</button>
+              <p id="roster-lock-hint" class="roster-lock-hint" hidden>End the active attendance session before adding students.</p>
+            </form>
+            <div class="roster-tools">
+              <a class="text-link" href="student-template.csv" download>↓ Download CSV template</a>
+              <label class="import-button" for="student-import">Import roster CSV</label>
+              <input id="student-import" class="file-input" type="file" accept=".csv,text/csv">
+            </div>
+            <p class="help-text" id="import-help">CSV columns: name, misNumber, departmentName. Save Excel sheets as CSV UTF-8.</p>
+            <div class="table-wrap">
+              <table>
+                <thead><tr><th>STUDENT</th><th>MIS NUMBER</th><th>DEPARTMENT</th><th>STATUS</th><th></th></tr></thead>
+                <tbody id="student-list"></tbody>
+              </table>
+              <div class="empty-state" id="empty-roster">
+                <span class="empty-icon" aria-hidden="true">♙</span>
+                <strong>Your roster is ready</strong>
+                <p>Add your first student using the form above.</p>
+              </div>
+            </div>
+          </section>
+
+          <aside class="side-column">
+            <section class="panel session-panel">
+              <div class="panel-heading">
+                <div><p class="eyebrow">QUICK ACTION</p><h2>Take attendance</h2></div>
+                <span class="session-icon" aria-hidden="true">⌁</span>
+              </div>
+              <p class="muted session-copy">Start a class session, then mark students present from the roster.</p>
+              <form id="session-form" class="session-form">
+                <label>Class or lesson name<input name="title" placeholder="e.g. Science — Period 2" maxlength="80" required></label>
+                <button class="button button-primary button-wide" type="submit">Start attendance session</button>
+              </form>
+              <div id="active-session" class="active-session" hidden>
+                <div class="session-status"><span class="status-dot"></span><span>SESSION IN PROGRESS</span></div>
+                <h3 id="session-title"></h3>
+                <div class="qr-frame"><img id="session-qr" alt="QR code for student attendance"></div>
+                <p class="qr-help">Students scan this code and enter their registered MIS number.</p>
+                <p class="phone-link">Student check-in link: <a id="phone-link" target="_blank" rel="noreferrer"></a></p>
+                <button class="button button-outline button-wide" id="end-session" type="button">End attendance session</button>
+              </div>
+              <p id="network-hint" class="network-hint" hidden></p>
+            </section>
+            <section class="panel activity-panel">
+              <div class="panel-heading">
+                <div><p class="eyebrow">LIVE UPDATES</p><h2>Recent check-ins</h2></div>
+                <span class="live-label"><span></span> LIVE</span>
+              </div>
+              <div id="activity-list" class="activity-list"></div>
+              <div class="activity-empty" id="empty-activity">Student check-ins will appear here.</div>
+            </section>
+          </aside>
+        </div>
+
+        <section class="panel reports-panel">
+          <div class="panel-heading">
+            <div><p class="eyebrow">ATTENDANCE HISTORY</p><h2>Reports</h2></div>
+            <span class="muted report-note">Download a CSV that opens in spreadsheet software.</span>
+          </div>
+          <div class="table-wrap">
+            <table>
+              <thead><tr><th>CLASS / SESSION</th><th>DATE</th><th>STATUS</th><th>ATTENDANCE</th><th></th></tr></thead>
+              <tbody id="report-list"></tbody>
+            </table>
+            <div class="empty-state compact" id="empty-reports">Completed sessions will appear here.</div>
+          </div>
+        </section>
+      </main>
+      <footer>Records are saved on the computer running the app. Keep it running and connect student phones to the same Wi-Fi.</footer>
+    </div>
+    <div id="toast" class="toast" role="status" aria-live="polite"></div>
+    <dialog id="teacher-login" class="login-dialog">
+      <form id="teacher-login-form" class="session-form">
+        <p class="eyebrow">TEACHER ACCESS</p>
+        <h2>Sign in to attendance</h2>
+        <p class="muted">Enter the teacher password configured for this app.</p>
+        <label>Teacher password<input name="password" type="password" autocomplete="current-password" required></label>
+        <button class="button button-primary button-wide" type="submit">Continue</button>
+        <p id="login-error" class="login-error" role="alert"></p>
+      </form>
+    </dialog>
+  </body>
+</html>
